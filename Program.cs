@@ -1,5 +1,6 @@
 using Serilog;
 using Serilog.Events;
+using SheetIncision.Backend.Middlewares;
 
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Debug()
@@ -30,6 +31,7 @@ try
 
     var app = builder.Build();
 
+    app.UseMiddleware(typeof(ExceptionHandlingMiddleware));
     app.UseSerilogRequestLogging();
 
     if (app.Environment.IsDevelopment())
