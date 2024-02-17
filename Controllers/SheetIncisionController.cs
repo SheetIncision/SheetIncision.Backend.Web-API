@@ -9,13 +9,20 @@ namespace SheetIncision.Backend.Controllers;
 public class SheetIncisionController : Controller
 {
     [HttpGet("GetNumberOfPieces")]
-    public async Task<IActionResult> GetNumberOfPieces([FromQuery] string data)
+    public async Task<IActionResult> GetNumberOfPieces([FromQuery] string? data)
     {
-        var requestBody = JsonConvert.DeserializeObject<RequestBody>(data);
+        if (data is not null)
+        {
+            var requestBody = JsonConvert.DeserializeObject<RequestBody>(data);
 
-        var matrixOfIncision = new MatrixOfIncision(requestBody.Matrix, requestBody.AllowDiagonals);
+            var matrixOfIncision = new MatrixOfIncision(requestBody.Matrix, requestBody.AllowDiagonals);
 
-        return Ok(await matrixOfIncision.GetNumberOfZones());
+            return Ok(await matrixOfIncision.GetNumberOfZones());
+        }
+        else
+        {
+            return NoContent();
+        }
     }
 
 }
